@@ -7,11 +7,12 @@ pipeline {
       agent {
         docker {
           image 'maven:3.9-eclipse-temurin-25'
+          args '-v $WORKSPACE:/app'
           reuseNode true
         }
       }
       steps {
-        sh 'mvn clean install || true'
+        sh 'cd /app && mvn clean install || true'
       }
     }
     stage('Docker Build') {
