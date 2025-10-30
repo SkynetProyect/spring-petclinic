@@ -1,4 +1,5 @@
 #!groovy
+#!groovy
 
 pipeline {
   agent none
@@ -7,21 +8,29 @@ pipeline {
       agent {
         docker {
           image 'maven:3.9-eclipse-temurin-25'
+          // 🔹 Monta el workspace del host Jenkins dentro del contenedor
+          args '-v $WORKSPACE:/app -w /app'
           reuseNode true
         }
       }
       steps {
         sh '''
-          pwd
-          ls -la
+          echo "🚀 Compilando proyecto con Maven..."
           mvn clean install -DskipTests
           echo "📦 Contenido del directorio target:"
-          ls -l target || echo "⚠️ target no existe"
-          docker build -t leninospina/spring-petclinic:latest .
+          ls -l target || echo "⚠️ No existe el directorio target"
         '''
       }
-      
     }
 
+    stage('Docker Build') {
+      agent any
+      steps {
+        sh '''
+          echo "🐳 Construyendo imagen Docker..."
+          docker build -t <docker-username>/spring-petclinic:latest .
+        '''
+      }
+    }
   }
 }
