@@ -7,13 +7,13 @@ pipeline {
       agent {
         docker {
           image 'maven:3.9-eclipse-temurin-25'
-          args '-v /var/jenkins_home/workspace/spring-pletclinic-docker:/app'
           reuseNode true
         }
       }
       steps {
         sh '''
-          cd /app
+          pwd
+          ls -la
           mvn clean install -DskipTests
           echo "📦 Contenido del directorio target:"
           ls -l target || echo "⚠️ target no existe"
