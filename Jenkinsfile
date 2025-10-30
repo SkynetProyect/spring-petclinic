@@ -7,7 +7,7 @@ pipeline {
       agent {
         docker {
           image 'maven:3.9-eclipse-temurin-25'
-          args '-v $WORKSPACE:/app'
+          args '-v /var/jenkins_home/workspace/spring-pletclinic-docker:/app'
           reuseNode true
         }
       }
